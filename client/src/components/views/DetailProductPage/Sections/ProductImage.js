@@ -9,9 +9,12 @@ function ProductImage(props) {
             let images = [];
 
             props.detail.images && props.detail.images.map(item => {
+                console.log("image item: ",item);
                 images.push({
-                    original: `http://localhost:5000/${item}`,
-                    thumbnail: `http://localhost:5000/${item}`
+                    // original: `http://localhost:5000/${item}`,
+                    // thumbnail: `http://localhost:5000/${item}`
+                    original: `${item}`,
+                    thumbnail: `${item}`
                 })
             })
             setImages(images)

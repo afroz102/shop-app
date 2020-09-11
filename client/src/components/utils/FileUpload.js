@@ -20,10 +20,8 @@ function FileUpload(props) {
             .then(response => {
                 console.log("response: ", response);
                 if (response.data.success) {
-
                     setImages([...Images, response.data.image])
                     props.refreshFunction([...Images, response.data.image])
-
                 }
                 else {
                     alert('Failed to save the Image in Server');
@@ -80,8 +78,8 @@ function FileUpload(props) {
                                 width: '300px',
                                 height: '240px'
                             }}
-                            src={`http://localhost:5000/${image}`}
-                            // src={`${image}`}
+                            // src={`http://localhost:5000/${image}`}
+                            src={`${image}`}
                             alt={`productImg-${index}`}
                         />
                     </div>

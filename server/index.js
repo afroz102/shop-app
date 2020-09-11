@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const cors = require('cors')
 
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
 const config = require("./config/key");
@@ -25,9 +25,11 @@ const connect = mongoose.connect(config.mongoURI, {
 
 app.use(cors())
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/users', require('./routes/users'));
 app.use('/api/product', require('./routes/product'));
@@ -35,7 +37,7 @@ app.use('/api/product', require('./routes/product'));
 
 //use this to show the image you have in node js server to client (react js)
 //https://stackoverflow.com/questions/48914987/send-image-path-from-node-js-express-server-to-react-client
-app.use(express.static('public'));
+// app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 // Serve static assets if in production

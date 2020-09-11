@@ -5,10 +5,21 @@ const multer = require('multer');
 
 const { auth } = require("../middleware/auth");
 
+// Import and set cloudinary configuration
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME || 'dougxmqdw',
+    api_key: process.env.API_KEY || '374497738569243',
+    api_secret: process.env.API_SECRET || '0JNw5118EPgTJwJ0Pi05-IaY97A'
+});
+
+
+
 const fileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
+    // destination: (req, file, cb) => {
+    //     console.log("file, filestorage: ", file);
+    //     cb(null, '/uploads/');
+    // },
     filename: (req, file, cb) => {
         cb(null, `${Date.now()}_${file.originalname}`);
     },
@@ -19,27 +30,61 @@ const fileStorage = multer.diskStorage({
         }
         cb(null, true);
     }
-})
+});
 
-var upload = multer({ storage: fileStorage }).single("file")
-
+var upload = multer({ storage: fileStorage }).single('file');
 
 //=================================
 //             Product
 //=================================
 
-router.post("/uploadImage", auth, (req, res) => {
+router.post("/uploadImage", auth, async (req, res) => {
+    var cloudinaryImgUrl = null;
+    var imgUrl = null;
 
-    upload(req, res, err => {
+    await upload(req, res, err => {
         if (err) {
+            console.log("error: ", err);
             return res.json({ success: false, err })
         }
-        return res.json({
-            success: true,
-            image: res.req.file.path,
-            fileName: res.req.file.filename
+        imgUrl = res.req.file.path;
+        console.log("hello", imgUrl);
+
+        cloudinary.uploader.upload(imgUrl, function (error, response) {
+            if (error) {
+                console.log("image file not uploaded to cloudinary>>", error);
+                return res.json({ success: false, error });
+            }
+            console.log("response from image section cloudinary", response);
+            cloudinaryImgUrl = response.url;
+            console.log("cloudinaryUrl>>", cloudinaryImgUrl);
+
+            return res.json({
+                success: true,
+                image: cloudinaryImgUrl,
+                fileName: "res.req.file.filename"
+            });
         });
-    })
+    });
+
+    // console.log("imgUrl>>>", imgUrl);
+
+
+
+    console.log("Outside img: ", cloudinaryImgUrl);
+    // upload(req, res, err => {
+    //     if (err) {
+    //         console.log("error: ", err);
+    //         return res.json({ success: false, err })
+    //     }
+    //     // imgUrl = res.req.file.path;
+    //     // console.log("hello", imgUrl);
+    //     return res.json({
+    //         success: true,
+    //         image: res.req.file.path,
+    //         fileName: res.req.file.filename
+    //     });
+    // });
 
 });
 
@@ -143,7 +188,7 @@ router.get("/products_by_id", (req, res) => {
         .exec((err, product) => {
             if (err) return res.status(400).send(err)
             return res.status(200).send(product)
-        })
+        });
 });
 
 
