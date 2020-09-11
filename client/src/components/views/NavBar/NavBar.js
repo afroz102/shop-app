@@ -18,7 +18,10 @@ function NavBar() {
   return (
     <nav className="menu" style={{ position: 'fixed', zIndex: 5, width: '100%' }}>
       <div className="menu__logo">
-        <a href="/">Logo</a>
+        {/* <a href="/">Logo</a> */}
+        <a href="/">
+          <img src="https://res-console.cloudinary.com/dougxmqdw/thumbnails/v1/image/upload/v1599822162/c2I1dTJ5eXk0cHhjdjV2eHhjdm4=/preview" width="60px" height="40px" />
+        </a>
       </div>
       <div className="menu__container">
         <div className="menu_left">
